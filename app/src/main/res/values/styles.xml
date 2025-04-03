@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom AlertDialog Style -->
+    <style name="CustomDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- 배경색 변경 -->
+        <item name="android:background">@color/dialog_background</item>
+
+        <!-- 텍스트 크기 및 색상 변경 -->
+        <item name="android:textColorPrimary">@color/dialog_text_color</item>
+        <item name="android:textSize">24sp</item>
+
+        <!-- 버튼 스타일 -->
+        <item name="android:buttonStyle">@drawable/button_background_red</item>
+    </style>
+</resources>

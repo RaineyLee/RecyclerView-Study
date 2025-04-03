@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_number"
+        android:textSize="20sp"
+        android:text="no"
+        android:textStyle="bold"/>
+
+    <CheckBox
+        android:id="@+id/chk_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleY="1.5"
+        android:scaleX="1.5"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/txt_order_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        android:text="order id"/>
+
+    <TextView
+        android:id="@+id/txt_item_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        android:text="item id"/>
+
+    <TextView
+        android:id="@+id/txt_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        android:text="item name"/>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/txt_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="10 ea"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+</LinearLayout>
