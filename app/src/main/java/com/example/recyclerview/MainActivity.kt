@@ -3,6 +3,7 @@ package com.example.recyclerview
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,16 +45,31 @@ class MainActivity : AppCompatActivity() {
             itemAdapter.clearSelectedItems() // MainActivity에서 OrderAdapter를 선언 하고 OrderAdapter에서 이 함수를 정의 한다.
             binding.txtSelected.text = "0"
         }
+
+        binding.btnSave.setOnClickListener {
+            val selectedPositions = itemAdapter.getCheckedItems()
+
+            // 각 position에 +1 적용
+            val adjustedPositions = selectedPositions.map { it + 1 }
+
+            // Set<Int> -> 문자열로 변환
+            val message = if (selectedPositions.isNotEmpty()) {
+                showQuantityDialog(adjustedPositions)
+            } else {
+                "선택된 항목이 없습니다."
+            }
+        }
     }
 
     private fun fetchOrders(orderId: String) {
         RetrofitClient.instance.getOrders(orderId).enqueue(object : Callback<List<D_order>> {
             override fun onResponse(call: Call<List<D_order>>, response: Response<List<D_order>>) {
                 if (response.isSuccessful) {
-                    response.body()?.let {
+                    val data = response.body()
+                    if(data != null){
                         itemList.clear()
-                        itemList.addAll(it)
-                        itemAdapter.notifyDataSetChanged()  // RecyclerView 갱신
+                        itemList.addAll(data)
+                        itemAdapter.notifyDataSetChanged()
                     }
                 } else {
                     Toast.makeText(this@MainActivity, "서버 응답 오류", Toast.LENGTH_SHORT).show()
@@ -65,5 +81,24 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun showQuantityDialog(selectedItems: List<Int>) {
+        val dialogBuilder = AlertDialog.Builder(this, R.style.CustomDialogStyle)  // this는 MainActivity의 context
+        dialogBuilder.setTitle("불출 하시겠습니까?")
+        dialogBuilder.setMessage(selectedItems.toString())
+
+        dialogBuilder.setPositiveButton("확인") { _, _ ->
+            Toast.makeText(this@MainActivity,"내용이 전달 되었습니다.",Toast.LENGTH_SHORT).show()
+        }
+
+        dialogBuilder.setNegativeButton("취소") { _, _ ->
+            Toast.makeText(this@MainActivity,"취소 되었습니다.",Toast.LENGTH_SHORT).show()
+        }
+
+        val dialog = dialogBuilder.create()
+        dialog.setCancelable(false)
+        dialog.show()
+    }
+
 }
 

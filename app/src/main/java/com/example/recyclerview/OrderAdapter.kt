@@ -36,12 +36,12 @@ class OrderAdapter(
             onTotalItemCountChanged(itemList.size)
 
             // 기존 체크 상태 유지
-            binding.chkOrder.setOnCheckedChangeListener(null) // 리스너 초기화
+            binding.chkOrder.setOnCheckedChangeListener(null) // 리싸이클러뷰가 재사용 될 때, 체크박스의 상태값이 재사용된 뷰에 반영되지 않기 위해 리스너를 중지 시킴
             binding.chkOrder.isChecked = checkedItems.contains(position)
 
             //itemView click event
             itemView.setOnClickListener  {
-                showQuantityDialog(item)
+                showQuantityDialog(item, position)
             }
 
 //            //checkbox click event 체크박스 클릭으로는 선택 및 해지 못 하게 --> 아래 코드로 대체 가능
@@ -59,28 +59,28 @@ class OrderAdapter(
 
             // 체크박스 클릭 방지 (다이얼로그에서만 변경)
             binding.chkOrder.setOnClickListener {
-                binding.chkOrder.isChecked = checkedItems.contains(position) // 기존 상태로 되돌림
+                binding.chkOrder.isChecked = checkedItems.contains(position) // 현재 위치가 선택 되어 있는지 확인 하는 로직
             }
 
         }
 
-        private fun showQuantityDialog(item: D_order){
-            val context = itemView.context
+        private fun showQuantityDialog(item: D_order, position: Int){
+            val context = itemView.context // 다이얼로그 창을 띄우기 위한 화면 또는 앱 정보
             val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogStyle)
             dialogBuilder.setTitle("수량 : ${item.quantity}")
 //            dialogBuilder.setMessage("Quantity : ${item.quantity}")
 
             dialogBuilder.setPositiveButton("Confirm"){_,_->
                 binding.chkOrder.isChecked = true
-                checkedItems.add(adapterPosition)
+                checkedItems.add(position)
                 onSelectedCountChanged(checkedItems.size) // 선택된 아이템 개수를 MainActivity에 전달
-                notifyItemChanged(adapterPosition)
+                notifyItemChanged(position)
             }
             dialogBuilder.setNegativeButton("Cancel"){_,_->
                 binding.chkOrder.isChecked = false
-                checkedItems.remove(adapterPosition)
+                checkedItems.remove(position)
                 onSelectedCountChanged(checkedItems.size) // 선택된 아이템 개수를 MainActivity에 전달
-                notifyItemChanged(adapterPosition)
+                notifyItemChanged(position)
             }
 
             val dialog = dialogBuilder.create()
@@ -108,6 +108,11 @@ class OrderAdapter(
     fun clearSelectedItems() {
         checkedItems.clear()  // 체크된 항목들 초기화
         notifyDataSetChanged() // RecyclerView 갱신
+    }
+
+    // 체크된 아이템들을 MainActivity로 전달
+    fun getCheckedItems(): Set<Int> {
+        return checkedItems
     }
 
 }
